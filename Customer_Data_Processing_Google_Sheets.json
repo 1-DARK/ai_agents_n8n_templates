@@ -1,0 +1,279 @@
+{
+  "name": "Basic1",
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "getAllPeople"
+      },
+      "type": "n8n-nodes-base.n8nTrainingCustomerDatastore",
+      "typeVersion": 1,
+      "position": [
+        0,
+        -160
+      ],
+      "id": "e4323d6b-0790-451d-9dee-5e2fc8e47086",
+      "name": "Customer Datastore (n8n training)"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -224,
+        -160
+      ],
+      "id": "2ca4e853-5168-45e8-884f-b165e2fe218c",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1dvqV8jPRn0Y1hBGUnxadJgd3mEzf1CEHJcwsfLYt7co",
+          "mode": "list",
+          "cachedResultName": "TEST N8n Customer Data ",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1dvqV8jPRn0Y1hBGUnxadJgd3mEzf1CEHJcwsfLYt7co/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1899898555,
+          "mode": "list",
+          "cachedResultName": "MOCK_DATA",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1dvqV8jPRn0Y1hBGUnxadJgd3mEzf1CEHJcwsfLYt7co/edit#gid=1899898555"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        224,
+        -160
+      ],
+      "id": "de6fba88-6ba5-4596-bd78-d9ed81f058e9",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "ANS6QBY9e4bnyr9X",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "46003349-6cc2-40d9-b111-608209225f6a",
+              "name": "Customer_id",
+              "value": "={{ $json.customer_id }}",
+              "type": "string"
+            },
+            {
+              "id": "1a2b79b2-c96a-4323-b75f-1e0324f5dab0",
+              "name": "Full Name ",
+              "value": "={{ $json.first_name }}{{ $json.last_name }}",
+              "type": "string"
+            },
+            {
+              "id": "477e1486-d7a8-41a0-96e0-9353197cf216",
+              "name": "Email",
+              "value": "={{ $json.email }}",
+              "type": "string"
+            },
+            {
+              "id": "914dba24-8c34-4f0a-9b2c-58ff46cad4a4",
+              "name": "Phone_number",
+              "value": "={{ $json.phone_number }}",
+              "type": "string"
+            },
+            {
+              "id": "c5e70c10-7428-4b78-b5ef-51cb1035fc18",
+              "name": "Country",
+              "value": "={{ $json.country }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        448,
+        -160
+      ],
+      "id": "5e82e50c-d795-426e-99eb-2ac15274e03e",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "aced47c7-698c-47da-9042-08aa189e9a8d",
+              "leftValue": "={{ $json.Country }}",
+              "rightValue": "China",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        672,
+        -160
+      ],
+      "id": "8dad9fbc-81e0-485d-a66e-630670baaab7",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "0e129ba5-b8e3-491b-b654-e0c4b0a3dfb8",
+              "name": "Full Name",
+              "value": "={{ $json['Full Name '] }}",
+              "type": "string"
+            },
+            {
+              "id": "1ea6fc03-6acd-46be-b889-624c67d0f7bc",
+              "name": "Phone number",
+              "value": "={{ $json.Phone_number }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        896,
+        -256
+      ],
+      "id": "c2a94d1b-d1ad-476c-8d63-8363c4c384c0",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "0e129ba5-b8e3-491b-b654-e0c4b0a3dfb8",
+              "name": "Full Name",
+              "value": "={{ $json['Full Name '] }}",
+              "type": "string"
+            },
+            {
+              "id": "1ea6fc03-6acd-46be-b889-624c67d0f7bc",
+              "name": "Phone number",
+              "value": "={{ $json.Phone_number }}",
+              "type": "string"
+            },
+            {
+              "id": "ceb11741-edc7-4f4a-b686-486948c7e260",
+              "name": "Country",
+              "value": "={{ $json.Country }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        896,
+        -64
+      ],
+      "id": "592f45a7-c662-4215-b290-6e5d133c3e19",
+      "name": "Edit Fields2"
+    }
+  ],
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Customer Datastore (n8n training)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Customer Datastore (n8n training)": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "pinData": {},
+  "triggerCount": 0,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  }
+}

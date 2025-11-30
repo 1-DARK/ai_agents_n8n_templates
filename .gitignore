@@ -1,0 +1,23 @@
+# n8n specific
+.env
+.env.local
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Temporary files
+*.tmp
+*.temp
+
+# Credentials (if any are stored locally)
+credentials/
+secrets/
+

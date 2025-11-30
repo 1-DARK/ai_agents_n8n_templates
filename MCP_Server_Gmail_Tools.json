@@ -1,0 +1,99 @@
+{
+  "name": "MCP Server",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "18d410b9-07c4-44da-bfad-d47461034bab"
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpTrigger",
+      "typeVersion": 2,
+      "position": [
+        -224,
+        -96
+      ],
+      "id": "0bbde713-a273-429d-80c4-efd2e0a339aa",
+      "name": "MCP Server Trigger",
+      "webhookId": "18d410b9-07c4-44da-bfad-d47461034bab"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('To', ``, 'string') }}",
+        "subject": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Subject', ``, 'string') }}",
+        "emailType": "text",
+        "message": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message', ``, 'string') }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.1,
+      "position": [
+        96,
+        112
+      ],
+      "id": "208ca410-f896-4788-8a0d-f956e0c9a87b",
+      "name": "Send a message in Gmail",
+      "webhookId": "ee15234e-b2aa-4565-b72a-1d8c5c33bfc9",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "xdEldFw5pFIwC9H7",
+          "name": "Gmail account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "filters": {}
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.1,
+      "position": [
+        -304,
+        64
+      ],
+      "id": "896c17eb-470a-404f-8210-f6fcf6160092",
+      "name": "Get many messages in Gmail",
+      "webhookId": "ad2f1644-4bb5-45fd-a9b0-f9c8fc457655",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "xdEldFw5pFIwC9H7",
+          "name": "Gmail account 2"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Send a message in Gmail": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many messages in Gmail": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "pinData": {},
+  "triggerCount": 1,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  }
+}

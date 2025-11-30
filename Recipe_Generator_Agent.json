@@ -1,0 +1,250 @@
+{
+  "name": "Json Test",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -368,
+        -288
+      ],
+      "id": "67b5c1cf-d320-4c94-9917-621e6858ff33",
+      "name": "When chat message received",
+      "webhookId": "0aedde81-ee0c-4d48-aeb9-eacd4128cc57"
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "appd6dZ6d4rsZKdPq",
+          "mode": "list",
+          "cachedResultName": "Json",
+          "cachedResultUrl": "https://airtable.com/appd6dZ6d4rsZKdPq"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblyO71VpBnhE0yHk",
+          "mode": "list",
+          "cachedResultName": "Table 1",
+          "cachedResultUrl": "https://airtable.com/appd6dZ6d4rsZKdPq/tblyO71VpBnhE0yHk"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Recipe Name": "={{ $json.output.title }}",
+            "Description": "={{ $json.output.description }}",
+            "Ingredients": "={{ $json.output.ingredients }}",
+            "Instructions": "={{ $json.output.instructions }}",
+            "Tips": "={{ $json.output.tips }}"
+          },
+          "matchingColumns": [
+            "Add recepiet"
+          ],
+          "schema": [
+            {
+              "id": "Recipe Name",
+              "displayName": "Recipe Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Description",
+              "displayName": "Description",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Ingredients",
+              "displayName": "Ingredients",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Instructions",
+              "displayName": "Instructions",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Tips",
+              "displayName": "Tips",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        176,
+        -304
+      ],
+      "id": "1cc17096-2c8d-498e-8f32-bbc2efa278f4",
+      "name": "Create a record",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "ZmhQ6ij0EAqxPK0P",
+          "name": "Airtable Personal Access Token account 4"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -320,
+        -96
+      ],
+      "id": "f026c5b3-502c-421d-90db-a220da0e7ccb",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "EOqDGzN03cQiQ91q",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=<AgentInstructions>\n    <Role>\n        <name>RecipeGeneratorAgent</name>\n        <description>A helpful cooking assistant that generates custom recipes.</description>\n    </Role>\n    <Goal>\n        <Primary>Provide a complete recipe including ingredients and step-by-step instructions\nbased on the user's requested dish. </Primary>\n    </Goal>\n    <Instructions>\n        <Instruction>Once you receive the user's dish name note them down carefully.\n</Instruction>\n        <Instruction>Generate a list of ingredients with accurate quantities tailored to the\nspecified serving size.</Instruction>\n        <Instruction>Provide clear, step-by-step instructions on how to prepare the dish.\n</Instruction>\n        <Instruction>Where applicable, include cooking times, tips, or variations to enhance the\nrecipe.</Instruction>\n    </Instructions>\n</AgentInstructions>\n<Examples>\n    <Example>\n        <UserInput>     \n\nPoha with Stuffed Potato </UserInput >\n        <UserOutput>\n {\n  \"title\": \"Egg Burji (Spicy Scrambled Eggs)\",\n  \"description\": \"A quick, spicy, and flavorful Indian-style scrambled eggs dish made with onions, tomatoes, green chilies, and spices. Perfect for breakfast, brunch, or a light meal.\",\n  \"yields\": \"2 servings\",\n  \"prep_time\": \"10 minutes\",\n  \"cook_time\": \"15 minutes\",\n  \"ingredients\": \"4 large Eggs, 1 medium Onion (finely chopped), 1 medium Tomato (finely chopped), 1-2 Green Chilies (slit or finely chopped), 1 teaspoon Ginger-Garlic Paste, 2 tablespoons Coriander Leaves (chopped), 2 tablespoons Oil or Butter, 1/4 teaspoon Turmeric Powder, 1/2 teaspoon Red Chili Powder, 1 teaspoon Coriander Powder, 1/2 teaspoon Cumin Powder, 1/2 teaspoon Garam Masala (optional), Salt to taste.\",\n  \"instructions\": \"Whisk eggs with a pinch of salt and set aside. Heat oil or butter in a pan and sauté onions until golden brown. Add green chilies and ginger-garlic paste; cook until the raw smell disappears. Add tomatoes and cook until soft and oil separates. Add turmeric, chili powder, coriander powder, cumin powder, and salt; stir well. Pour whisked eggs into the mixture, let set slightly, then gently scramble. Cook until eggs are done but still moist. Sprinkle garam masala (optional), garnish with coriander leaves, and serve hot.\",\n  \"tips\": \"Adjust green chilies and red chili powder as per spice preference. Add bell peppers, peas, or spinach with tomatoes for extra nutrition. For creaminess, add milk or cream to whisked eggs before cooking. Best served with pav, bread slices, roti, chapati, paratha, or stuffed in a wrap/roll.\"\n}\n\n  </UserOutput>\n    </Example>\n</Examples>"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -176,
+        -304
+      ],
+      "id": "e82da21d-8176-4b92-acdb-adc7385d7b7f",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.toolCalculator",
+      "typeVersion": 1,
+      "position": [
+        -128,
+        -64
+      ],
+      "id": "330aa052-8b27-4bf6-90bb-b8f5b9ba566d",
+      "name": "Calculator"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "\n  {\n  \"title\": \"Egg Burji (Spicy Scrambled Eggs)\",\n  \"description\": \"A quick, spicy, and flavorful Indian-style scrambled eggs dish made with onions, tomatoes, green chilies, and spices. Perfect for breakfast, brunch, or a light meal.\",\n  \"yields\": \"2 servings\",\n  \"prep_time\": \"10 minutes\",\n  \"cook_time\": \"15 minutes\",\n  \"ingredients\": \"4 large Eggs, 1 medium Onion (finely chopped), 1 medium Tomato (finely chopped), 1-2 Green Chilies (slit or finely chopped), 1 teaspoon Ginger-Garlic Paste, 2 tablespoons Coriander Leaves (chopped), 2 tablespoons Oil or Butter, 1/4 teaspoon Turmeric Powder, 1/2 teaspoon Red Chili Powder, 1 teaspoon Coriander Powder, 1/2 teaspoon Cumin Powder, 1/2 teaspoon Garam Masala (optional), Salt to taste.\",\n  \"instructions\": \"Whisk eggs with a pinch of salt and set aside. Heat oil or butter in a pan and sauté onions until golden brown. Add green chilies and ginger-garlic paste; cook until the raw smell disappears. Add tomatoes and cook until soft and oil separates. Add turmeric, chili powder, coriander powder, cumin powder, and salt; stir well. Pour whisked eggs into the mixture, let set slightly, then gently scramble. Cook until eggs are done but still moist. Sprinkle garam masala (optional), garnish with coriander leaves, and serve hot.\",\n  \"tips\": \"Adjust green chilies and red chili powder as per spice preference. Add bell peppers, peas, or spinach with tomatoes for extra nutrition. For creaminess, add milk or cream to whisked eggs before cooking. Best served with pav, bread slices, roti, chapati, paratha, or stuffed in a wrap/roll.\"\n}\n\n   \n"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        16,
+        -80
+      ],
+      "id": "4ee2fb9a-7331-4890-8f28-8c274f8896f3",
+      "name": "Structured Output Parser"
+    }
+  ],
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Create a record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calculator": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "pinData": {},
+  "triggerCount": 0,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  }
+}

@@ -1,0 +1,336 @@
+{
+  "name": "Unread Mail and Store in Airtable",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 2
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -368,
+        -64
+      ],
+      "id": "a2e132e2-4489-42bf-91c9-5c4f5fb6290c",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "limit": 2,
+        "filters": {
+          "labelIds": [
+            "UNREAD"
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        -160,
+        -64
+      ],
+      "id": "eb4a861b-8175-457f-9d1d-c75ac96bb5d9",
+      "name": "Gmail All Mails",
+      "webhookId": "9bc0d5d2-2720-4203-a986-c60abc0f46dc",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "IpGFgqS5zVyIi4r2",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "messageId": "={{ $json.threadId }}",
+        "simple": false,
+        "options": {
+          "downloadAttachments": true
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        48,
+        -64
+      ],
+      "id": "9383fdae-6f82-4ede-af46-a843fae1c39d",
+      "name": "Gmail All Details",
+      "webhookId": "9c7afddd-504f-4f50-8ac3-100089eb36e4",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "IpGFgqS5zVyIi4r2",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Subject :{{ $json.headers.subject }}\n\nEmail Body:{{ $json.text }}",
+        "hasOutputParser": true,
+        "messages": {
+          "messageValues": [
+            {
+              "message": "<AgentInstructions>\n    <Role>\n        <Name>FullStackDevAssistant</Name>\n        <Description>             An AI agent specialized in helping a Full Stack Developer with tasks like writing professional emails, explaining technical concepts, debugging, generating code snippets, and providing career-related guidance.         </Description>\n    </Role>\n    <Goal>\n        <Primary>             To assist the Full Stack Developer in managing professional communication, solving technical problems, and streamlining development workflows efficiently.         </Primary>\n    </Goal>\n    <Instructions>\n        <Instruction>Generate clear and professional email drafts related to job applications, project updates, or client communication.</Instruction>\n        <Instruction>Explain backend and frontend concepts in a simple and structured manner.</Instruction>\n        <Instruction>Provide optimized code snippets and debugging guidance when asked.</Instruction>\n        <Instruction>Maintain a professional and concise tone suitable for workplace interactions.</Instruction>\n    </Instructions>\n    <Examples>\n        <Example>\n            <UserInput>                 Write a follow-up email after a job interview for a Full Stack Developer role.             </UserInput>\n            <AgentOutput>                 Subject: Thank You for the Opportunity                    Dear [Hiring Manager's Name],                    I sincerely appreciate the opportunity to interview for the Full Stack Developer position at [Company Name].                   It was a pleasure discussing how my experience in React.js, Node.js, and MongoDB aligns with your team’s goals.                    I am very excited about the possibility of contributing to [specific project or team mentioned].                   Please feel free to reach out if you need any additional information from my side.                    Thank you once again for your time and consideration.                    Best regards,                   [Your Name]               </AgentOutput>\n        </Example>\n        <Example>\n            <UserInput>                 Explain what middleware is in Express.js.             </UserInput>\n            <AgentOutput>                 In Express.js, middleware functions are functions that execute during the request-response cycle.                   They can modify the request or response, execute code, or end the request.                    Example:                   ```js                 app.use((req, res, next) => {                   console.log(\"Request URL:\", req.url);                   next(); // pass control to the next middleware                 });                 ```                 Here, the middleware logs the URL for every incoming request before passing control to the next route or middleware.             </AgentOutput>\n        </Example>\n        <Example>\n            <UserInput>                 Write a professional email to update a client about the completion of a project milestone.             </UserInput>\n            <AgentOutput>                 Subject: Project Milestone Update                    Dear [Client's Name],                    I am pleased to inform you that we have successfully completed the [milestone name] for your project.                   This includes [briefly describe features or tasks completed].                    We are now moving on to the next phase, which focuses on [next milestone/goal].                   Please let me know if you would like to schedule a quick review meeting to go over the progress.                    Thank you for your continued trust and collaboration.                    Best regards,                 Harsh Vardhan Chauhan             </AgentOutput>\n        </Example>\n    </Examples>\n</AgentInstructions>"
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        272,
+        -64
+      ],
+      "id": "68daa38e-803c-409d-8ff9-936a8dfce652",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "model": "meta-llama/llama-4-scout:free",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        256,
+        144
+      ],
+      "id": "c79cae9f-5e5f-4f9c-8473-7915a35237ad",
+      "name": "OpenRouter Chat Model",
+      "credentials": {
+        "openRouterApi": {
+          "id": "s7h2icDLzKqlx1Ma",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "appWOFM72qV6vyc9W",
+          "mode": "list",
+          "cachedResultName": "Email",
+          "cachedResultUrl": "https://airtable.com/appWOFM72qV6vyc9W"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblP5loYGBAZxF9gS",
+          "mode": "list",
+          "cachedResultName": "Table 1",
+          "cachedResultUrl": "https://airtable.com/appWOFM72qV6vyc9W/tblP5loYGBAZxF9gS"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Sender Name": "={{ $('Gmail All Details').item.json.to.value[0].name }}",
+            "From Email": "={{ $('Gmail All Details').item.json.from.value[0].address }}",
+            "Email Body": "={{ $('Gmail All Details').item.json.text }}",
+            "Body Draft Reply": "={{ $json.text }}",
+            "Thread ID": "={{ $('Gmail All Details').item.json.threadId }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Sender Name",
+              "displayName": "Sender Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "From Email",
+              "displayName": "From Email",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Email Body",
+              "displayName": "Email Body",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Body Draft Reply",
+              "displayName": "Body Draft Reply",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Thread ID",
+              "displayName": "Thread ID",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        624,
+        -64
+      ],
+      "id": "dee70043-ca40-42d0-94ec-9b40a530b4db",
+      "name": "Create a record",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "ZmhQ6ij0EAqxPK0P",
+          "name": "Airtable Personal Access Token account 4"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "markAsRead",
+        "messageId": "={{ $json.fields['Thread ID'] }}"
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        832,
+        -64
+      ],
+      "id": "c1d0f098-e71f-4474-943b-877790423349",
+      "name": "Mark a message as read",
+      "webhookId": "4e5aa1ea-74dd-41a7-a62d-283671ac88e8",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "IpGFgqS5zVyIi4r2",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "👉 Example use cases:\n\nCustomer support: auto-log complaints/issues in Airtable.\n\nSales: extract leads from incoming emails and add to CRM.\n\nHR: process job applications automatically.\n\nReports: summarize daily incoming mails and push to a dashboard.",
+        "height": 224,
+        "width": 512
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -160,
+        -352
+      ],
+      "typeVersion": 1,
+      "id": "1de019d2-77db-41c4-bd2b-b579c4acc9ac",
+      "name": "Sticky Note"
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Gmail All Mails",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail All Mails": {
+      "main": [
+        [
+          {
+            "node": "Gmail All Details",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail All Details": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "Create a record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a record": {
+      "main": [
+        [
+          {
+            "node": "Mark a message as read",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "pinData": {},
+  "triggerCount": 0,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  }
+}
